@@ -6,7 +6,7 @@
 /*   By: UTurkey <uturkey@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 19:05:10 by UTurkey           #+#    #+#             */
-/*   Updated: 2020/07/26 19:33:10 by UTurkey          ###   ########.fr       */
+/*   Updated: 2020/07/27 01:16:58 by UTurkey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static void	print_d_ch(int n)
 		sym = '0' + n;
 	write(1, &sym, 1);
 }
-static void flag_neg(int *rez, t_printf_format s_format, int *bef_dot, int sym)
+
+static void	flag_neg(int *rez, t_printf_format s_format, int *bef_dot, int sym)
 {
 	if (!s_format.pres_dot && sym == '0' && s_format.set_dot)
 		(*rez)--;
@@ -54,6 +55,11 @@ static void	flag_loc(int *rez, t_printf_format s_format, int *bef_dot, int sym)
 	if (s_format.zero == ' ')
 		*rez = *rez + char_repeat(s_format.zero, s_format.num - *rez -
 				*bef_dot);
+	if (s_format.is_space == ' ')
+	{
+		write(1, " ", 1);
+		rez--;
+	}
 	if (s_format.zero == '0')
 		*rez = *rez + char_repeat(s_format.zero, s_format.num - *rez -
 				*bef_dot);
@@ -63,7 +69,7 @@ static void	flag_loc(int *rez, t_printf_format s_format, int *bef_dot, int sym)
 		print_d_ch(sym);
 }
 
-static int	nbr_d(int n, int rez,int bif, t_printf_format s_format)
+static int	nbr_d(int n, int rez, int bif, t_printf_format s_format)
 {
 	int	step;
 	int	bef_dot;
@@ -78,14 +84,8 @@ static int	nbr_d(int n, int rez,int bif, t_printf_format s_format)
 		print_d_ch(sym);
 	}
 	else
-	{
-		if (bif == 1)
-		{
-			flag_neg(&rez, s_format, &bef_dot, sym);
-		}
-		else
+		(bif == 1) ? flag_neg(&rez, s_format, &bef_dot, sym) : 
 			flag_loc(&rez, s_format, &bef_dot, sym);
-	}
 	return (rez);
 }
 
@@ -93,10 +93,20 @@ int			print_d(int n, t_printf_format s_format)
 {
 	int		rez;
 
+	if (n == -2147483648)
+	{
+		write(1, "-2147483648", 11);
+		return (11);
+	}
+	if (s_format.set_dot == 1 && n == 0 && s_format.pres_dot == 0)
+	{
+		return (s_format.num < 0) ? (rez = char_repeat(' ',
+			(s_format.num * -1))) : (rez = char_repeat(' ', (s_format.num)));
+	}
 	if (n < 0)
 	{
 		rez = nbr_d(n * (-1), 0, 1, s_format);
-		s_format.num ++;
+		s_format.num++;
 		rez = rez + char_repeat(' ', (s_format.num * -1) - rez);
 	}
 	else

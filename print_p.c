@@ -6,7 +6,7 @@
 /*   By: UTurkey <uturkey@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 19:05:50 by UTurkey           #+#    #+#             */
-/*   Updated: 2020/07/26 16:02:35 by UTurkey          ###   ########.fr       */
+/*   Updated: 2020/07/27 00:23:50 by UTurkey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ static int	nbr_p(unsigned long long n, int rez, t_printf_format s_format)
 int			print_p(unsigned long long n, t_printf_format s_format)
 {
 	int	rez;
-	
+
 	if (n == 0)
-		write(1, "(nil)",5);
+		write(1, "(nil)", 5);
 	else
 	{
-	rez = nbr_p(n, 0, s_format);
-	rez = rez + char_repeat(' ', (s_format.num * -1) - rez);
+		rez = nbr_p(n, 0, s_format);
+		rez = rez + char_repeat(' ', (s_format.num * -1) - rez);
 	}
 	return (rez);
 }

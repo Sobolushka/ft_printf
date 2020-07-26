@@ -6,7 +6,7 @@
 /*   By: UTurkey <uturkey@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 19:05:10 by UTurkey           #+#    #+#             */
-/*   Updated: 2020/07/26 16:23:07 by UTurkey          ###   ########.fr       */
+/*   Updated: 2020/07/27 00:26:12 by UTurkey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,9 @@ static void	flag_loc(int *rez, t_printf_format s_format, int *bef_dot, char sym)
 	if (s_format.set_dot)
 		s_format.zero = ' ';
 	*bef_dot = 0;
-	if (*rez < s_format.pres_dot)
-		*bef_dot = s_format.pres_dot - *rez;
-	(*rez) += 2;
 	if (s_format.zero == ' ')
 		*rez = *rez + char_repeat(s_format.zero, s_format.num - *rez -
 				*bef_dot);
-	if (s_format.zero == '0')
-		*rez = *rez + char_repeat(s_format.zero, s_format.num - *rez -
-				*bef_dot);
-	if (*bef_dot)
-		*rez = *rez + char_repeat('0', *bef_dot);
 	if (s_format.pres_dot || sym != '\0' || !s_format.set_dot)
 		print_s_ch(sym);
 }
@@ -59,13 +51,20 @@ static int	nbr_s(const char *str, int rez, int len, t_printf_format s_format)
 
 int			print_s(const char *str, t_printf_format s_format)
 {
-	int	rez;
+	int		rez;
+	int		bif;
 
 	if (str == NULL)
 		str = "(null)";
 	if (*str == '\0')
-		return (rez = char_repeat(' ', (s_format.num * -1)));
-	rez = nbr_s(str, 0, ft_strlen(str), s_format);
+	{
+		return (s_format.num < 0) ? (rez = char_repeat(' ',
+			(s_format.num * -1))) : (rez = char_repeat(' ', (s_format.num)));
+	}
+	bif = ft_strlen(str);
+	if (s_format.pres_dot < bif && s_format.set_dot == 1)
+		bif = s_format.pres_dot;
+	rez = nbr_s(str, 0, bif, s_format);
 	rez = rez + char_repeat(' ', (s_format.num * -1) - rez);
 	return (rez);
 }
