@@ -84,7 +84,7 @@ static int	nbr_d(int n, int rez, int bif, t_printf_format s_format)
 		print_d_ch(sym);
 	}
 	else
-		(bif == 1) ? flag_neg(&rez, s_format, &bef_dot, sym) : 
+		(bif == 1) ? flag_neg(&rez, s_format, &bef_dot, sym) :
 			flag_loc(&rez, s_format, &bef_dot, sym);
 	return (rez);
 }
