@@ -6,7 +6,7 @@
 /*   By: UTurkey <uturkey@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/25 19:05:10 by UTurkey           #+#    #+#             */
-/*   Updated: 2020/07/27 01:16:58 by UTurkey          ###   ########.fr       */
+/*   Updated: 2020/07/27 15:42:18 by UTurkey          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,12 +92,11 @@ static int	nbr_d(int n, int rez, int bif, t_printf_format s_format)
 int			print_d(int n, t_printf_format s_format)
 {
 	int		rez;
+	int		kk;
 
-	if (n == -2147483648)
-	{
-		write(1, "-2147483648", 11);
-		return (11);
-	}
+	kk = (n == -2147483648) ? (1) : 0;
+	rez = (n == -2147483648) ? (1) : 0;
+	n = (n == -2147483648) ? (n / 10) : (n);
 	if (s_format.set_dot == 1 && n == 0 && s_format.pres_dot == 0)
 	{
 		return (s_format.num < 0) ? (rez = char_repeat(' ',
@@ -107,6 +106,7 @@ int			print_d(int n, t_printf_format s_format)
 	{
 		rez = nbr_d(n * (-1), 0, 1, s_format);
 		s_format.num++;
+		(kk == 1) ? (write(1, "8", 1)) : 0;
 		rez = rez + char_repeat(' ', (s_format.num * -1) - rez);
 	}
 	else
